@@ -1,5 +1,6 @@
 "use client"
 
+// Fixed Suspense boundary for Next.js 15 compatibility
 import { useEffect, useState, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
