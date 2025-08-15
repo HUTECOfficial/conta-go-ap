@@ -54,6 +54,43 @@ export async function signIn(email: string, password: string) {
   throw new Error("Invalid login credentials")
 }
 
+export async function signUp(name: string, email: string, password: string) {
+  // Verificar si el usuario ya existe
+  const existingUser = USERS.find(user => user.email === email)
+  if (existingUser) {
+    throw new Error("Ya existe un usuario con este email")
+  }
+
+  // Validaciones básicas
+  if (password.length < 6) {
+    throw new Error("La contraseña debe tener al menos 6 caracteres")
+  }
+
+  if (!email.includes("@")) {
+    throw new Error("Email inválido")
+  }
+
+  // Crear nuevo usuario
+  const newUser: UserProfile = {
+    id: `user-${Date.now()}`,
+    name,
+    email,
+    hasEfirma: false,
+    lineaCaptura: `LC-${Date.now()}`,
+    isAdmin: false,
+    created_at: new Date().toISOString(),
+  }
+
+  // Agregar a la lista de usuarios (en una app real esto sería una base de datos)
+  USERS.push(newUser)
+
+  // Iniciar sesión automáticamente después del registro
+  currentUser = newUser
+  localStorage.setItem("currentUser", JSON.stringify(currentUser))
+
+  return { user: { id: newUser.id, email }, profile: newUser }
+}
+
 export async function signOut() {
   // Sin retrasos simulados
   currentUser = null
